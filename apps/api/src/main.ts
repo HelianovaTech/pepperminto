@@ -31,6 +31,7 @@ const server: FastifyInstance = Fastify({
 const publicRoutes = new Set([
   "/",
   "/api/v1/auth/login",
+  "/api/v1/auth/check",
   "/api/v1/ticket/public/create",
   "/api/v1/unsafe/create-admin",
   "/docs",

@@ -930,16 +930,16 @@ export function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      let session = await prisma.session.findUnique({
-        where: {
-          sessionToken: request.headers.authorization!.split(" ")[1],
-        },
-      });
+      const sessionUser = await checkSession(request);
 
-      await checkSession(request);
+      if (!sessionUser) {
+        return reply.code(401).send({
+          message: "Unauthorized",
+        });
+      }
 
       let user = await prisma.user.findUnique({
-        where: { id: session!.userId },
+        where: { id: sessionUser.id },
       });
 
       if (!user) {
