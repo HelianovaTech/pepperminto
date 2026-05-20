@@ -967,8 +967,8 @@ export function authRoutes(fastify: FastifyInstance) {
         ticket_status_changed: user!.notify_ticket_status_changed,
         ticket_comments: user!.notify_ticket_comments,
         ticket_assigned: user!.notify_ticket_assigned,
-        sso_status: config!.sso_active,
-        version: config!.client_version,
+        sso_status: config?.sso_active ?? false,
+        version: config?.client_version ?? "unknown",
         notifcations,
         external_user: user!.external_user,
       };
