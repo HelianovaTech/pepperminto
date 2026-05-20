@@ -228,4 +228,73 @@ export function userRoutes(fastify: FastifyInstance) {
       });
     }
   );
+
+  // TEMPORARY: Create admin user without auth (REMOVE IN PRODUCTION)
+  fastify.post(
+    "/api/v1/unsafe/create-admin",
+    {
+      schema: {
+        body: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            password: { type: "string" },
+            name: { type: "string" },
+          },
+          required: ["email", "password", "name"],
+        },
+        response: {
+          200: {
+            type: "object",
+            properties: {
+              success: { type: "boolean" },
+              user: { type: "object", additionalProperties: true },
+              message: { type: "string" },
+            },
+            additionalProperties: true,
+          },
+        },
+      },
+    },
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { email, password, name }: any = request.body;
+
+      const e = email.toLowerCase();
+      const hash = await bcrypt.hash(password, 10);
+
+      try {
+        const user = await prisma.user.create({
+          data: {
+            name,
+            email: e,
+            password: hash,
+            isAdmin: true,
+          },
+        });
+
+        const client = track();
+        client.capture({
+          event: "admin_user_created_unsafe",
+          distinctId: "uuid",
+        });
+        client.shutdown();
+
+        reply.send({
+          success: true,
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            isAdmin: user.isAdmin,
+          },
+          message: "Admin user created successfully",
+        });
+      } catch (error: any) {
+        reply.status(400).send({
+          success: false,
+          message: error.message || "Error creating user",
+        });
+      }
+    }
+  );
 }
