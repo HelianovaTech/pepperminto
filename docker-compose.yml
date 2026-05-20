@@ -46,16 +46,6 @@ services:
     ports:
       - "3000:3000"
 
-  docs:
-    build:
-      context: .
-      dockerfile: apps/docs/Dockerfile
-    container_name: pepperminto_docs
-    restart: unless-stopped
-    env_file: .env
-    ports:
-      - "3003:3003"
-
   landing-page:
     build:
       context: .

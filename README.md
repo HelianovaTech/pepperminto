@@ -28,7 +28,6 @@ This is a fork of the original Peppermint project.
 - `apps/api` – Fastify API server
 - `apps/client` – Admin dashboard (Next.js)
 - `apps/knowledge-base` – Public knowledge base (Next.js)
-- `apps/docs` – Documentation site (Nextra)
 - `apps/landing-page` – Marketing landing page (Next.js)
 
 ## 🚀 Local development
@@ -47,18 +46,7 @@ Default ports:
 - `knowledge-base` → `http://localhost:3000`
 - `api` → `http://localhost:3001`
 - `client` → `http://localhost:3002`
-- `docs` → `http://localhost:3003`
 - `landing-page` → `http://localhost:3004`
-
-## 📚 Documentation
-
-Run the docs locally with:
-
-```bash
-pnpm --filter docs dev
-```
-
-The docs are in `apps/docs/content` and the sidebar order is defined in `apps/docs/content/_meta.js`.
 
 ## 🐳 Docker buildx commands
 
@@ -71,11 +59,6 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 docker buildx build --platform linux/amd64,linux/arm64 \
   -f apps/client/Dockerfile \
   -t nulldoubt/pepperminto-client:latest \
-  --push .
-
-docker buildx build --platform linux/amd64,linux/arm64 \
-  -f apps/docs/Dockerfile \
-  -t nulldoubt/pepperminto-docs:latest \
   --push .
 
 docker buildx build --platform linux/amd64,linux/arm64 \
